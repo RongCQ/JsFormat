@@ -85,7 +85,13 @@ class JsFormatCommand(sublime_plugin.TextCommand):
         if(len(selection) > 0 and s.get("format_selection")):
             jsf.format_selection(self.view, edit, opts)
         else:
+            self.change_syntax()
             jsf.format_whole_file(self.view, edit, opts)
 
     def is_visible(self):
         return jsf_activation.is_js_buffer(self.view)
+    
+    def change_syntax(self):
+        """ Changes syntax to JSON if its in plain text """
+        if "Plain text" in self.view.settings().get('syntax'):
+            self.view.set_syntax_file("Packages/JavaScript/JavaScript.tmLanguage")
